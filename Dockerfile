@@ -29,7 +29,6 @@ RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositori
 RUN apk update &&           \
     apk add --no-cache      \
     curl                    \
-    composer                \
     nginx                   \
     redis                   \
     mariadb                 \
@@ -57,8 +56,7 @@ RUN apk update &&           \
     php81-session           \
     php81-iconv             \
     php81-zip               \
-    php81-opcache         &&\
-    rm -rf /var/lib/apt/lists/*
+    php81-opcache
 
 # Copy SSL Certificate Generation Script
 COPY ./scripts/generate-cert.sh /usr/local/bin/generate-cert.sh
