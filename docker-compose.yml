@@ -3,7 +3,7 @@
 # *                        All Rights Reserved
 # *
 #* Title: Docker-compose Configuration
-#* Version: DockerCompose-V0.1-DEV
+#* Version: DockerCompose-V0.2-beta
 #* Date: 2023-06-16
 #* By: KingMaj0r
 # *
@@ -25,12 +25,12 @@ services:
       - "9000:9000" # php-fpm
     environment:
       - SERVER_NAME=0.0.0.0
-      - CERT_NAME=example
-      - SSL_ENABLED=false # Set this to true to enable SSL
       - MYSQL_ROOT_PASSWORD=password
       - MYSQL_DATABASE=default
       - MYSQL_USER=default_user
       - MYSQL_PASSWORD=password
+      - SSL_ENABLED=false # Set this to true to enable SSL
+#      - CERT_NAME=example
     volumes:
       - ./app:/var/www/html
 #      - ./data/db:/var/lib/mysql

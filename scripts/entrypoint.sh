@@ -1,3 +1,15 @@
+#/**
+# * *****************************************************************************
+# *                        All Rights Reserved
+# *
+#* Title: Entrypoint Configuration
+#* Version: Entrypoint-V0.1-beta
+#* Date: 2023-06-19
+#* By: KingMaj0r
+# *
+# * *****************************************************************************
+#**/
+
 #!/bin/bash
 
 # Generate SSL Certificate

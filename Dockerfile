@@ -3,7 +3,7 @@
 # *                        All Rights Reserved
 # *
 #* Title: Dockerfile Configuration
-#* Version: Dockerfile-V0.1-DEV
+#* Version: Dockerfile-V0.1-beta
 #* Date: 2023-06-16
 #* By: KingMaj0r
 # *

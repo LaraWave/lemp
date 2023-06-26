@@ -1,1 +1,2 @@
-docker build -t kingmaj0r/lemp:latest . && docker compose up
+docker build -t kingmaj0r/lemp:latest . \
+docker compose up

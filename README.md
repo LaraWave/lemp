@@ -10,7 +10,7 @@ This repository contains a Dockerized LEMP stack configuration template for depl
 ## Getting Started
 
 1. Clone this repository to your local machine:
-``` git clone https://github.com/your-username/lemp.git ```
+``` git clone https://github.com/larawave/lemp.git ```
 
 2. Start the LEMP stack using Docker Compose:
 ``` docker-compose up -d ```
