@@ -16,10 +16,6 @@ FROM alpine:3.16
 # Proxy example (not needed unless your using a proxy.)
 #ENV HTTP_PROXY http://IP:Port
 #ENV HTTPS_PROXY http://IP:Port
-ENV http_proxy=http://172.16.254.1:3128
-ENV https_proxy=http://172.16.254.1:3128
-ENV HTTP_PROXY=http://172.16.254.1:3128
-ENV HTTPS_PROXY=http://172.16.254.1:3128
 
 # Enable edge and edge community repositories
 RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories && \
