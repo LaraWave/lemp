@@ -1,0 +1,68 @@
+#/**
+# * *****************************************************************************
+# *                        All Rights Reserved
+# *
+# * Title: Nginx Configuration
+# * Version: Nginx-V0.1-DEV
+# * Date: 2023-06-26
+# * By: KingMaj0r
+# *
+# * *****************************************************************************
+#**/
+
+events {
+    worker_connections 1024;
+}
+
+http {
+    server {
+        listen 80;
+        listen [::]:80;
+        server_name ${SERVER_NAME};
+
+        root /var/www/html;
+        index index.php index.html;
+
+        # allow larger file uploads and longer script runtimes
+        client_max_body_size 100m;
+        client_body_timeout 120s;
+
+        sendfile off;
+
+        add_header X-Content-Type-Options nosniff;
+        add_header X-XSS-Protection "1; mode=block";
+        add_header X-Robots-Tag none;
+        add_header Content-Security-Policy "frame-ancestors 'self'";
+        add_header X-Frame-Options DENY;
+        add_header Referrer-Policy same-origin;
+
+        location / {
+            try_files $uri $uri/ /index.php?$query_string;
+        }
+
+        location ~ \.php$ {
+            fastcgi_split_path_info ^(.+\.php)(/.+)$;
+            fastcgi_pass 127.0.0.1:9000;
+            fastcgi_index index.php;
+            include fastcgi_params;
+            fastcgi_param PHP_VALUE "upload_max_filesize=100M;post_max_size=100M";
+            fastcgi_param HTTP_PROXY "";
+            fastcgi_intercept_errors off;
+            fastcgi_buffer_size 16k;
+            fastcgi_buffers 4 16k;
+            fastcgi_connect_timeout 300;
+            fastcgi_send_timeout 300;
+            fastcgi_read_timeout 300;
+            include /etc/nginx/fastcgi_params;
+        }
+
+        location ~ /\.ht {
+            deny all;
+        }
+
+        # Listen for SSL if SSL_ENABLED is set to true
+        # Use the SSL certificate and key defined in the SSL_CERT_DIR
+        # environment variable
+        ${SSL_SERVER_BLOCK}
+    }
+}

@@ -1,0 +1,42 @@
+#/**
+# * *****************************************************************************
+# *                        All Rights Reserved
+# *
+#* Title: Docker-compose Configuration
+#* Version: DockerCompose-V0.1-DEV
+#* Date: 2023-06-16
+#* By: KingMaj0r
+# *
+# * *****************************************************************************
+#**/
+
+version: '3'
+services:
+  lemp:
+    image: kingmaj0r/lemp:latest
+    container_name: lemp
+    restart: always
+    network_mode: bridge
+    ports:
+      - "80:80"     # Nginx none SSL port
+      - "443:443"   # Nginx SSL port
+      - "3306:3306" # Mariadb
+      - "6379:6379" # Redis
+      - "9000:9000" # php-fpm
+    environment:
+      - SERVER_NAME=0.0.0.0
+      - CERT_NAME=example
+      - SSL_ENABLED=false # Set this to true to enable SSL
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=default
+      - MYSQL_USER=default_user
+      - MYSQL_PASSWORD=password
+    volumes:
+      - ./app:/var/www/html
+#      - ./data/db:/var/lib/mysql
+      - ./data/logs/nginx:/var/log/nginx
+      - ./data/logs/php-fpm:/var/log/php-fpm
+#      - ./data/logs/mysql:/var/log/mysql
+#      - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf
+#      - ./config/php-fpm/www.conf:/etc/php81/php-fpm.d/www.conf
+#      - ./config/mysql/my.cnf:/etc/my.cnf.d/my.cnf
