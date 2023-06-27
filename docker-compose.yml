@@ -29,14 +29,16 @@ services:
       - MYSQL_DATABASE=default
       - MYSQL_USER=default_user
       - MYSQL_PASSWORD=password
+      - REDIS_PASSWORD=password
+      - PHPMYADMIN=true
       - SSL_ENABLED=false # Set this to true to enable SSL
 #      - CERT_NAME=example
     volumes:
-      - ./app:/var/www/html
+      - ./app:/var/www/lemp
 #      - ./data/db:/var/lib/mysql
       - ./data/logs/nginx:/var/log/nginx
       - ./data/logs/php-fpm:/var/log/php-fpm
-#      - ./data/logs/mysql:/var/log/mysql
+      - ./data/logs/mysql:/var/log/mysql
 #      - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf
 #      - ./config/php-fpm/www.conf:/etc/php81/php-fpm.d/www.conf
 #      - ./config/mysql/my.cnf:/etc/my.cnf.d/my.cnf
