@@ -35,6 +35,7 @@ RUN apk update &&           \
     mariadb-client          \
     openssl                 \
     gettext                 \
+    git                     \
     php82                   \
     php82-fpm               \
     php82-mysqli            \

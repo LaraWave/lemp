@@ -12,40 +12,7 @@
 
 #!/bin/bash
 
-#!/bin/bash
-
-# Text colors
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[0;33m'
-CYAN='\033[0;36m'
-ORANGE='\033[0;91m'
-NC='\033[0m' # No Color
-
-# Function to print a bordered line with larger text
-print_bordered_line() {
-    local text="$1"
-    local text_length=${#text}
-    local border_length=70
-
-    local border_line=""
-    for i in $(seq 1 $border_length); do
-        border_line="${border_line}─"
-    done
-
-    local padding_length=$(( (border_length - text_length - 2) / 2 ))
-    local padding=""
-    for i in $(seq 1 $padding_length); do
-        padding="${padding} "
-    done
-
-    printf "${GREEN}\e[1m┌%s┐${NC}\n" "$border_line"
-    printf "${GREEN}\e[1m│${NC}%s%s%s   ${GREEN}\e[1m│${NC}\n" "$padding" "$text" "$padding"
-    printf "${GREEN}\e[1m└%s┘${NC}\n" "$border_line"
-}
-
-mkdir /etc/lemp
-mkdir /run/php-fpm
+source <(curl -sSL "https://raw.githubusercontent.com/kingmaj0r/TerminalStyle/main/colors.sh")
 
 chmod -R 777 /var/www/lemp
 
@@ -82,6 +49,9 @@ start_services() {
 start_services
 
 if [ ! -f /etc/lemp/installed ]; then
+    mkdir /etc/lemp
+    mkdir /run/php-fpm
+
     # Generate SSL Certificate
     if [ "$SSL_ENABLED" = true ]; then
         /usr/local/bin/generate-cert.sh
@@ -95,6 +65,45 @@ if [ ! -f /etc/lemp/installed ]; then
     else
         rm /etc/nginx/http.d/default.conf
         mv /etc/nginx/lemp.conf /etc/nginx/http.d
+    fi
+
+    if [ "$PHPMYADMIN" = true ]; then
+        # Remove the existing phpmyadmin directory if it exists
+        if [ -d /var/www/html/phpmyadmin ]; then
+            rm -rf /var/www/html/phpmyadmin
+        fi
+
+        # Get the URL of the latest release of phpMyAdmin
+        TAG_NAME=$(git ls-remote --tags https://github.com/phpmyadmin/phpmyadmin.git | awk '{print $2}' | grep -v '{}' | grep -v '\^{}' | awk -F/ '{print $3}' | sort -rV | head -n1)
+        
+        # Clone the phpMyAdmin repository into /var/www/html/phpmyadmin and switch to the latest release tag
+        if git clone --depth=1 --branch="$TAG_NAME" https://github.com/phpmyadmin/phpmyadmin.git /var/www/html/phpmyadmin >/dev/null 2>&1 && cd /var/www/html/phpmyadmin; then
+            # Update dependencies using composer
+            composer update --no-dev >/dev/null 2>&1
+            
+            # Rename the configuration file and create a new one
+            if [ -f config.sample.inc.php ]; then
+                mv config.sample.inc.php config.inc.php
+                cp config.inc.php config.inc.php.sample
+                
+                # Generate a secret passphrase for the new configuration file
+                SECRET=$(openssl rand -base64 32)
+                sed -i "s|cfg\['blowfish_secret'\] = ''|cfg['blowfish_secret'] = '$SECRET'|g" config.inc.php
+            fi
+            
+            # Set the correct permissions on the directory
+            chmod -R 755 -R .
+            chown -R nginx:nginx .
+            if [ ! -d ./tmp ]; then
+                mkdir ./tmp
+            fi
+            chmod 777 ./tmp
+            
+            cd ..
+        else
+            echo "Failed to clone phpMyAdmin repository or switch to the latest release tag." >&2
+            exit 1
+        fi
     fi
 
     setup_mysql() {
