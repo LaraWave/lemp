@@ -1,4 +1,5 @@
 # LEMP Stack Configuration Template
+![LaraWave LEMP](https://github.com/LaraWave/.github/blob/main/LaraWave_LEMP.png)
 
 This repository contains a Dockerized LEMP stack configuration template for deploying dynamic websites and web applications. The LEMP stack consists of Linux, Nginx, MySQL/MariaDB, and PHP, and is known for its high performance and scalability. The configuration template includes best practices for security, performance tuning, and customization, and can be easily adapted for various use cases and environments.
 
